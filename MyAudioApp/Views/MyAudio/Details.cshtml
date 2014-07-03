@@ -1,0 +1,43 @@
+﻿@model MyAudioApp.Models.MyAudioTB
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>MyAudioTB</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.AlbumName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.AlbumName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Song)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Song)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.AlbumBy)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.AlbumBy)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Label)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Label)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

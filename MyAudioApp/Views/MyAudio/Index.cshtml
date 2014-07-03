@@ -1,0 +1,58 @@
+﻿@model IEnumerable<MyAudioApp.Models.MyAudioTB>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+    @using (Html.BeginForm())
+    {
+    <p>
+        Song: @Html.TextBox("SearchString")
+        <input type="submit" value=" Filter" />
+    </p>
+    }
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AlbumName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Song)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AlbumBy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Label)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AlbumName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Song)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AlbumBy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Label)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>
