@@ -5,7 +5,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="7b91057d8f614bdda4382fe9142efab7" Name="Diagram1">
-        <EntityTypeShape EntityType="MyAudioDBModel.MyAudioTB" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyAudioDBModel.MyAudioTB" Width="2.125" PointX="0.75" PointY="0.75" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -7,15 +7,26 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Upload New", "Create")
     @using (Html.BeginForm())
     {
     <p>
         Song: @Html.TextBox("SearchString")
         <input type="submit" value=" Filter" />
+        
     </p>
+        
     }
+
 </p>
+@using (Html.BeginForm("Upload", "MyAudio", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{ 
+    @Html.AntiForgeryToken() 
+    <fieldset> <legend>Upload a file</legend> 
+    <div class="editor-field"> @Html.TextBox("file", "", new { type = "file" }) </div>
+     <div class="editor-field"> <input type="submit" value="Upload" /> </div> 
+    </fieldset> 
+}  
 <table>
     <tr>
         <th>
@@ -50,7 +61,8 @@
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
             @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id }) |
+            @Html.ActionLink("Play", "Player", new { id=item.Id })
         </td>
     </tr>
 }

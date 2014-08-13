@@ -75,10 +75,35 @@ namespace MyAudioApp.Controllers
             return View();
             db.MyAudioTBs.Add(audiotocreate);
             db.SaveChanges();
-            return RedirectToAction("Index");
-           
+            return RedirectToAction("Index");    
         }
-
+        //
+        // GET: /MyAudio/Uploadsong/
+       
+            [HttpPost] 
+        public ActionResult Upload(HttpPostedFileBase file) 
+            { 
+                try 
+                { 
+                    if (file.ContentLength > 0)
+                {
+                    var filename = System.IO.Path.GetFileName(file.FileName);
+                    //var fileName =Path.GetFileName(file.FileName); 
+                  //var path =  Path.Combine(Server.MapPath("~/App_Data/Audio"), filename ); 
+                       
+                       var path = System.IO.Path.Combine(Server.MapPath ("~/Audio"),filename);
+                       file.SaveAs(path);
+                    } 
+                    ViewBag.Message = "Upload successful";
+                    return RedirectToAction("Index");
+                } 
+                catch
+                {
+                    ViewBag.Message = "Upload failed"; 
+                    return RedirectToAction("Index"); 
+                }
+            } 
+            
         //
         // GET: /MyAudio/Edit/5
 
@@ -142,5 +167,13 @@ namespace MyAudioApp.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+        public ActionResult Player()
+        {
+           // Response.AppendHeader("Content-Disposition", "inline; filename=music.wav");
+            //return File(audioFilename, "audio/wav");
+            return View();
+        }
+      
+
     }
 }
