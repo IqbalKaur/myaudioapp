@@ -19,5 +19,6 @@ namespace MyAudioApp.Models
         public string Song { get; set; }
         public string AlbumBy { get; set; }
         public string Label { get; set; }
+        public string Filename { get; set; }
     }
 }

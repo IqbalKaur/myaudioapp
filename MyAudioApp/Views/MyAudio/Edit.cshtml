@@ -47,6 +47,15 @@
             @Html.ValidationMessageFor(model => model.Label)
         </div>
 
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Filename)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Filename)
+            @Html.ValidationMessageFor(model => model.Filename)
+        </div>
+
+
         <p>
             <input type="submit" value="Save" />
         </p>

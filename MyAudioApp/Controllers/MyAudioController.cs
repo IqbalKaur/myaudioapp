@@ -69,18 +69,36 @@ namespace MyAudioApp.Controllers
 
        // [HttpPost]
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Create([Bind(Exclude = "id")] MyAudioTB audiotocreate) 
+        public ActionResult Create([Bind(Exclude = "id")] MyAudioTB audiotocreate, HttpPostedFileBase file) 
         {
             if(!ModelState.IsValid )
-            return View();
-            db.MyAudioTBs.Add(audiotocreate);
-            db.SaveChanges();
-            return RedirectToAction("Index");    
+                 return View();
+
+            try
+            {
+                if (file.ContentLength > 0)
+                {
+                    var filename = System.IO.Path.GetFileName(file.FileName);        
+                    var path = System.IO.Path.Combine(Server.MapPath("~/Audio"), filename);
+                    file.SaveAs(path);
+                    audiotocreate.Filename = filename;
+                    db.MyAudioTBs.Add(audiotocreate);
+                    db.SaveChanges();
+                  
+                }
+                ViewBag.Message = "Upload successful";
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                ViewBag.Message = "Upload failed";
+                return RedirectToAction("Index");
+            }
         }
         //
         // GET: /MyAudio/Uploadsong/
        
-            [HttpPost] 
+       /*     [HttpPost] 
         public ActionResult Upload(HttpPostedFileBase file) 
             { 
                 try 
@@ -102,7 +120,7 @@ namespace MyAudioApp.Controllers
                     ViewBag.Message = "Upload failed"; 
                     return RedirectToAction("Index"); 
                 }
-            } 
+            } */
             
         //
         // GET: /MyAudio/Edit/5
@@ -164,6 +182,14 @@ namespace MyAudioApp.Controllers
         {
             MyAudioTB audio = db.MyAudioTBs.Find(id);
             db.MyAudioTBs.Remove(audio);
+            // var filename = System.IO.Path.GetFileName(file.FileName);
+            var path = System.IO.Path.Combine(Server.MapPath("~/Audio"), audio.Filename);
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+            }
+           
+           
             db.SaveChanges();
             return RedirectToAction("Index");
         }

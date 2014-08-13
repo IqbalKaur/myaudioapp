@@ -36,6 +36,13 @@
     <div class="display-field">
         @Html.DisplayFor(model => model.Label)
     </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Filename)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Filename)
+    </div>
 </fieldset>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |

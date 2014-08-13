@@ -6,7 +6,8 @@
 
 <h2>Create</h2>
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm("Create", "MyAudio", FormMethod.Post, new { enctype = "multipart/form-data"}))
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
@@ -45,6 +46,12 @@
             @Html.ValidationMessageFor(model => model.Label)
         </div>
 
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Filename)
+        </div>
+        
+        <div class="editor-field"> @Html.TextBox("file", "", new { type = "file" }) 
+        </div>
         <p>
             <input type="submit" value="Create" />
         </p>
