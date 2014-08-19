@@ -193,11 +193,23 @@ namespace MyAudioApp.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-        public ActionResult Player()
+
+        //
+        // GET: /MyAudio/Player/12
+
+        public ActionResult Player(int? id)
         {
-           // Response.AppendHeader("Content-Disposition", "inline; filename=music.wav");
-            //return File(audioFilename, "audio/wav");
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+            }
+            MyAudioTB audio = db.MyAudioTBs.Find(id);
+            if (audio == null)
+            {
+                return HttpNotFound();
+            }
+            return View(audio);
+           
         }
       
 

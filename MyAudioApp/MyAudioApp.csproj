@@ -353,9 +353,9 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\MyAudio\Player.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\MyAudio\Upload.cshtml" />
+    <Content Include="Views\MyAudio\Player.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
