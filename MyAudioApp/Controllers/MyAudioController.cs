@@ -5,38 +5,61 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
 using MyAudioApp.Models;
+using PagedList;
 
 namespace MyAudioApp.Controllers
 {
     public class MyAudioController : Controller
     {
         private MyAudioDBEntities db = new MyAudioDBEntities();
-        //
-     /*   // GET: /MyAudio/About
+        public ActionResult Index(string sortOrder, string currentFilter, int? page, string searchstring)
+        {
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.AlbumNameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.SongSortParm = sortOrder == "Song" ? "song_desc" : "Song";
+           if(searchstring != null)
+           {
+               page = 1;
+           }
+           else
+           {
+               searchstring = currentFilter;
+           }
+           ViewBag.CurrentFilter = searchstring;
 
-        public ActionResult About()
-        {
-            return View();
-        }
-        //
-        //GET: /MyAudio/contact
-        public ActionResult Contact()
-        {
-            return View();
-        } */
-        //
-        // GET: /MyAudio/ 
-
-        public ActionResult Index(string searchstring = "")
-        {
-           // searchstring = "proper";
             var audio = from m in db.MyAudioTBs select m;
             if (!String.IsNullOrEmpty(searchstring))
             {
-                //movies = movies.Where(s => s.Title.Contains(searchString));
+               
                 audio = audio.Where(s => s.Song.Contains(searchstring));
             }
-            return View(audio);
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    audio = audio.OrderByDescending(s => s.AlbumName);
+                    break;
+                case "Song":
+                    audio = audio.OrderBy(s => s.Song);
+                    break;
+                case "song_desc":
+                    audio = audio.OrderByDescending(s => s.Song);        
+                    break;
+                case "albumBy":
+                    audio = audio.OrderBy(s => s.AlbumBy);
+                    break;
+                case "label":
+                    audio = audio.OrderBy(s => s.Label);
+                    break;
+                case "filename":
+                    audio = audio.OrderBy(s => s.Filename);
+                    break;
+                default:  // Name ascending 
+                    audio = audio.OrderBy(s => s.AlbumName);
+                    break;
+            }
+            int pageSize = 4;
+            int pageNumber = (page ?? 1);
+            return View(audio.ToPagedList(pageNumber, pageSize));
         }
 
         //
@@ -66,8 +89,6 @@ namespace MyAudioApp.Controllers
 
         //
         // POST: /MyAudio/Create
-
-       // [HttpPost]
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Create([Bind(Exclude = "id")] MyAudioTB audiotocreate, HttpPostedFileBase file) 
         {
@@ -95,34 +116,7 @@ namespace MyAudioApp.Controllers
                 return RedirectToAction("Index");
             }
         }
-        //
-        // GET: /MyAudio/Uploadsong/
-       
-       /*     [HttpPost] 
-        public ActionResult Upload(HttpPostedFileBase file) 
-            { 
-                try 
-                { 
-                    if (file.ContentLength > 0)
-                {
-                    var filename = System.IO.Path.GetFileName(file.FileName);
-                    //var fileName =Path.GetFileName(file.FileName); 
-                  //var path =  Path.Combine(Server.MapPath("~/App_Data/Audio"), filename ); 
-                       
-                       var path = System.IO.Path.Combine(Server.MapPath ("~/Audio"),filename);
-                       file.SaveAs(path);
-                    } 
-                    ViewBag.Message = "Upload successful";
-                    return RedirectToAction("Index");
-                } 
-                catch
-                {
-                    ViewBag.Message = "Upload failed"; 
-                    return RedirectToAction("Index"); 
-                }
-            } */
-            
-        //
+    
         // GET: /MyAudio/Edit/5
 
         public ActionResult Edit(int id = 0)
@@ -132,8 +126,6 @@ namespace MyAudioApp.Controllers
             {
                 return HttpNotFound();
             }
-            //var audiotoedit = (from m in db.MyAudioTBs where m.Id == id select m).First();
-
             return View(audiotoedit);
         }
 
@@ -143,11 +135,8 @@ namespace MyAudioApp.Controllers
         [HttpPost]
         public ActionResult Edit(MyAudioTB audiotoedit)
         {
-            //var originalaudio = (from m in db.MyAudioTBs where m.Id == audiotoedit.Id  select m).First();
             if (ModelState.IsValid)
             {
-                //return View(originalaudio);
-                // _db.ApplyPropertyChanges(originalMovie.EntityKey.EntitySetName, movieToEdit);
                 db.Entry(audiotoedit).State = System.Data.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("index");
@@ -182,14 +171,11 @@ namespace MyAudioApp.Controllers
         {
             MyAudioTB audio = db.MyAudioTBs.Find(id);
             db.MyAudioTBs.Remove(audio);
-            // var filename = System.IO.Path.GetFileName(file.FileName);
             var path = System.IO.Path.Combine(Server.MapPath("~/Audio"), audio.Filename);
             if (System.IO.File.Exists(path))
             {
                 System.IO.File.Delete(path);
             }
-           
-           
             db.SaveChanges();
             return RedirectToAction("Index");
         }

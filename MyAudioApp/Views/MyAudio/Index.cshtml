@@ -1,4 +1,8 @@
-﻿@model IEnumerable<MyAudioApp.Models.MyAudioTB>
+﻿@*@model IEnumerable<MyAudioApp.Models.MyAudioTB>*@
+@model PagedList.IPagedList<MyAudioApp.Models.MyAudioTB>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
 
 @{
     ViewBag.Title = "Index";
@@ -8,31 +12,33 @@
 
 
     @Html.ActionLink("Upload New", "Create")
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Index", "MyAudio", FormMethod.Get))
     {
     <p>
-        Song: @Html.TextBox("SearchString")
-        <input type="submit" value=" Filter" />
+       Search By Song: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value=" Search" />
     </p>
      }
 
 
 <table>
-    <tr>
+ 
+   <tr>
         <th>
-            @Html.DisplayNameFor(model => model.AlbumName)
+          @Html.ActionLink("AlbumName", "Index", new { sortOrder = ViewBag.AlbumNameSortParm, currentFilter=ViewBag.CurrentFilter })  
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Song)
+            
+           @Html.ActionLink("Song", "Index", new { sortOrder = ViewBag.SongSortParm, currentFilter=ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.AlbumBy)
+            AlbumBy
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Label)
+            Label
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Filename)
+           Filename
         </th>
         <th></th>
     </tr>
@@ -64,3 +70,7 @@
 }
 
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
