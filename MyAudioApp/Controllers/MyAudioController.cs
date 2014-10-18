@@ -12,6 +12,7 @@ namespace MyAudioApp.Controllers
     public class MyAudioController : Controller
     {
         private MyAudioDBEntities db = new MyAudioDBEntities();
+      // List<SelectListItem> MyAudioTB = new List<SelectListItem>();
         public ActionResult Index(string sortOrder, string currentFilter, int? page, string searchstring)
         {
             ViewBag.CurrentSort = sortOrder;
@@ -84,6 +85,8 @@ namespace MyAudioApp.Controllers
 
         public ActionResult Create()
         {
+            ViewBag.MyAudioTB = db.MyAudioTBs.ToList();
+            //ViewData["Message"] = "Success";
             return View();
         }
 
@@ -92,6 +95,7 @@ namespace MyAudioApp.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Create([Bind(Exclude = "id")] MyAudioTB audiotocreate, HttpPostedFileBase file) 
         {
+            ViewBag.MyAudioTB = db.MyAudioTBs.ToList();
             if(!ModelState.IsValid )
                  return View();
 
@@ -100,20 +104,21 @@ namespace MyAudioApp.Controllers
                 if (file.ContentLength > 0)
                 {
                     var filename = System.IO.Path.GetFileName(file.FileName);        
-                    var path = System.IO.Path.Combine(Server.MapPath("~/Audio"), filename);
+                    var path = System.IO.Path.Combine(Server.MapPath("~/Audio"), filename);                    
                     file.SaveAs(path);
-                    audiotocreate.Filename = filename;
+                    audiotocreate.UserName = User.Identity.Name;
+                    audiotocreate.Filename = filename;                   
                     db.MyAudioTBs.Add(audiotocreate);
                     db.SaveChanges();
                   
                 }
-                ViewBag.Message = "Upload successful";
+                TempData["Success"] = "you have uploaded song successfully";
                 return RedirectToAction("Index");
             }
             catch
             {
-                ViewBag.Message = "Upload failed";
-                return RedirectToAction("Index");
+                ViewData["ErrorUploading"] = "Upload failed";
+                return View();
             }
         }
     
@@ -196,8 +201,6 @@ namespace MyAudioApp.Controllers
             }
             return View(audio);
            
-        }
-      
-
+        }       
     }
 }

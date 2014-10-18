@@ -1,67 +1,90 @@
 ﻿@model MyAudioApp.Models.MyAudioTB
-
+@*@model IEnumerable<MyAudioApp.Models.MyAudioTB>*@           
 @{
     ViewBag.Title = "Create";
+   
 }
-
-<h2>Create</h2>
-
-@using (Html.BeginForm("Create", "MyAudio", FormMethod.Post, new { enctype = "multipart/form-data"}))
+   
+    <h2>Create</h2>
+@if (ViewData["ErrorUploading"] != null)
 {
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-
-    <fieldset>
-        <legend>MyAudioTB</legend>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.AlbumName)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.AlbumName)
-            @Html.ValidationMessageFor(model => model.AlbumName)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Song)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Song)
-            @Html.ValidationMessageFor(model => model.Song)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.AlbumBy)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.AlbumBy)
-            @Html.ValidationMessageFor(model => model.AlbumBy)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Label)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Label)
-            @Html.ValidationMessageFor(model => model.Label)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Filename)
-        </div>
-        
-        <div class="editor-field"> @Html.TextBox("file", "", new { type = "file" }) 
-        </div>
-        <p>
-            <input type="submit" value="Create" />
-        </p>
-    </fieldset>
+    <div class="red">
+      <p><strong>ErrorUploading:</strong>@ViewData["ErrorUploading"].ToString()</p>
+    </div>
+} 
+@if (TempData["Success"] != null)
+{
+    <div class="green">
+      <p><strong>Success:</strong>@TempData["Success"].ToString()</p>
+    </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+    @using (Html.BeginForm("Create", "MyAudio", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+        <fieldset>
+            <legend>MyAudioTB</legend>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.AlbumName)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.AlbumName)
+                @Html.DropDownListFor(model => model.Id, new SelectList(ViewBag.MyAudioTB, "Id", "AlbumName"), "Select Album Name")
+                @Html.ValidationMessageFor(model => model.AlbumName)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Song)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Song)
+                @Html.ValidationMessageFor(model => model.Song)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.AlbumBy)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.AlbumBy)
+                @Html.ValidationMessageFor(model => model.AlbumBy)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Label)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Label)
+                @Html.ValidationMessageFor(model => model.Label)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Filename)
+            </div>
+            <div class="editor-field">
+                @Html.TextBox("file", "", new { type = "file" })
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.UserName)
+            </div>
+            <div class="editor-field">
+                @Html.ValidationMessageFor(model => model.UserName)
+            </div>
+
+            <strong>@User.Identity.Name</strong>
+
+            <p>
+                <input type="submit" value="Create" />
+            </p>
+        </fieldset>
+    }
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

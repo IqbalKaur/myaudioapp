@@ -15,6 +15,7 @@
           <Property Name="AlbumBy" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Label" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Filename" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar(max)" />
         </EntityType>
         <EntityContainer Name="MyAudioDBModelStoreContainer">
           <EntitySet Name="MyAudioTB" EntityType="Self.MyAudioTB" Schema="dbo" store:Type="Tables" />
@@ -33,6 +34,7 @@
           <Property Name="AlbumBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Label" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Filename" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityContainer Name="MyAudioDBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="MyAudioTBs" EntityType="Self.MyAudioTB" />
@@ -46,6 +48,7 @@
           <EntitySetMapping Name="MyAudioTBs">
             <EntityTypeMapping TypeName="MyAudioDBModel.MyAudioTB">
               <MappingFragment StoreEntitySet="MyAudioTB">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="Filename" ColumnName="Filename" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="AlbumName" ColumnName="AlbumName" />
